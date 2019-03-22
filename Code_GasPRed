@@ -1,0 +1,76 @@
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+
+mainpath=""
+filename = "Copy of CUO.csv"
+fullpath = os.path.join(mainpath, filename)
+data=pd.read_csv(fullpath)
+
+data=data.drop('cups', axis=1)
+data=data.drop('fechaFinMesConsumo', axis=1)
+
+filename2 = "Temp.csv"
+fullpath2 = os.path.join(mainpath, filename2)
+data2=pd.read_csv(fullpath2)
+
+fecha_in=data["fechaInicioMesConsumo"].tolist()
+period=data["Periodo"]
+con_dia=data["Consumo/dias"]
+
+
+day=data2["FECHA"].tolist()
+media_temp=data2["Media Extremadura"]  
+
+def medida_periodo(fecha_inicio, periodo_tot, dias, temperatura, consumo_dia):
+    
+    import matplotlib.pyplot as plt
+    
+    # inicializamos las listas para no tener errores más tarde cuando las llamemos
+    
+    longitud=len(fecha_inicio)
+    conexion_fechain_dias = [0] * longitud
+    ave_temp= [0] * longitud
+    tot_tep=[0] * longitud
+    
+    # buscamos en qué posición se encuentra cada día de fecha_inicio en la lista dias
+    
+    for i in range(longitud):
+        conexion_fechain_dias[i]=dias.index(fecha_inicio[i])
+    
+    # realizamos el cálculo de la suma de temperaturas para cada periodo
+        
+    for i in range(longitud):
+        ped=periodo_tot[i]
+        conex=conexion_fechain_dias[i]
+        tot_tep[i]=sum(temperatura[conex:(conex+ped)])    
+    
+    # haremos el promedio de temperatura/dia
+    
+    for i in range(longitud):
+        ped=periodo_tot[i]
+        temp=tot_tep[i]
+        ave_temp[i]=temp/ped
+    
+        
+    # Scatter plot 
+        
+    %matplotlib inline
+    
+    plt.scatter(ave_temp,consumo_dia)
+    plt.show()   
+    
+    plt.xlabel("Temperatura")
+    plt.ylabel("Consumo")
+    plt.title("temp vs consumo")
+
+    return ave_temp
+    
+    
+medida_periodo(fecha_in, period, day, media_temp, con_dia)
+    
+    
+plt.boxplot(data["Consumo/dias"])
+data['Promedio_temp'] = pd.Series(ave_temp, index=data.index)    
+    
