@@ -74,3 +74,13 @@ medida_periodo(fecha_in, period, day, media_temp, con_dia)
 plt.boxplot(data["Consumo/dias"])
 data['Promedio_temp'] = pd.Series(ave_temp, index=data.index)    
     
+    
+peaje_32=data[(data['codigoTarifaPeaje']==32) & (data['Consumo/dias']<=7000) & (data['Periodo']<=30)]
+
+
+peaje_31=data[(data['codigoTarifaPeaje']==31) & (data['Consumo/dias']<=7000) & (data['Periodo']<=30)]
+
+
+a=peaje_31['Consumo/dias']
+b=peaje_32['Consumo/dias']
+
